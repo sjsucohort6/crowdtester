@@ -35,7 +35,7 @@ public class TesterDAO extends BasicDAO<Tester, String> implements BaseDAO<Teste
     public List<String> add(List<Tester> entityList) {
         List<String> insertedIds = new ArrayList<>();
         if (entityList != null) {
-            for (Tester tester: entityList) {
+            for (Tester tester : entityList) {
                 Key<Tester> key = this.save(tester);
                 insertedIds.add(key.getId().toString());
             }
@@ -45,9 +45,9 @@ public class TesterDAO extends BasicDAO<Tester, String> implements BaseDAO<Teste
 
     @Override
     public long remove(List<String> entityIdsList) {
-        List<ObjectId> objectIds = new ArrayList<>();
+        List<String> objectIds = new ArrayList<>();
         for (String id : entityIdsList) {
-            objectIds.add(new ObjectId(id));
+            objectIds.add(id);
         }
         Query<Tester> query = this.createQuery().field(Mapper.ID_KEY).in(objectIds);
         return this.deleteByQuery(query).getN();
@@ -68,9 +68,9 @@ public class TesterDAO extends BasicDAO<Tester, String> implements BaseDAO<Teste
 
     @Override
     public List<Tester> fetchById(List<String> entityIdsList) {
-        List<ObjectId> objectIds = new ArrayList<>();
+        List<String> objectIds = new ArrayList<>();
         for (String id : entityIdsList) {
-            objectIds.add(new ObjectId(id));
+            objectIds.add(id);
         }
 
         Query<Tester> query = this.createQuery().field(Mapper.ID_KEY).in(objectIds);
@@ -91,7 +91,7 @@ public class TesterDAO extends BasicDAO<Tester, String> implements BaseDAO<Teste
         }
 
         List<DBObject> dbObjects = cursor.toArray();
-        for (DBObject dbObject: dbObjects) {
+        for (DBObject dbObject : dbObjects) {
             Tester course = morphia.fromDBObject(Tester.class, dbObject);
             courses.add(course);
         }

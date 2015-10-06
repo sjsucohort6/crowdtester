@@ -1,3 +1,8 @@
+/*
+ * Copyright (c) 2015 San Jose State University.    Permission is hereby granted, free of charge, to any person obtaining a copy  of this software and associated documentation files (the "Software"), to deal  in the Software without restriction, including without limitation the rights  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell  copies of the Software, and to permit persons to whom the Software is  furnished to do so, subject to the following conditions:    The above copyright notice and this permission notice shall be included in  all copies or substantial portions of the Software.
+ */
+
+
 package edu.sjsu.cohort6.crowdtester.database.dao.mongodb;
 
 import com.mongodb.DBCursor;
@@ -24,8 +29,8 @@ import java.util.List;
 public class AppDAO extends BasicDAO<App, String> implements BaseDAO<App> {
     private final Morphia morphia;
 
-    public AppDAO(Class<App> entityClass, MongoClient mongoClient, Morphia morphia, String dbName) {
-        super( mongoClient, morphia, dbName);
+    public AppDAO(MongoClient mongoClient, Morphia morphia, String dbName) {
+        super(mongoClient, morphia, dbName);
         this.morphia = morphia;
     }
 
@@ -33,7 +38,7 @@ public class AppDAO extends BasicDAO<App, String> implements BaseDAO<App> {
     public List<String> add(List<App> entityList) {
         List<String> insertedIds = new ArrayList<>();
         if (entityList != null) {
-            for (App app: entityList) {
+            for (App app : entityList) {
                 Key<App> key = this.save(app);
                 insertedIds.add(key.getId().toString());
             }
@@ -43,9 +48,9 @@ public class AppDAO extends BasicDAO<App, String> implements BaseDAO<App> {
 
     @Override
     public long remove(List<String> entityIdsList) {
-        List<ObjectId> objectIds = new ArrayList<>();
+        List<String> objectIds = new ArrayList<>();
         for (String id : entityIdsList) {
-            objectIds.add(new ObjectId(id));
+            objectIds.add(id);
         }
         Query<App> query = this.createQuery().field(Mapper.ID_KEY).in(objectIds);
         return this.deleteByQuery(query).getN();
@@ -53,7 +58,7 @@ public class AppDAO extends BasicDAO<App, String> implements BaseDAO<App> {
 
     @Override
     public void update(List<App> entityList) {
-        for (App app: entityList) {
+        for (App app : entityList) {
             UpdateOperations<App> ops = this.createUpdateOperations()
                     .set("name", app.getName())
                     .set("appFileName", app.getAppFileName())
@@ -73,9 +78,9 @@ public class AppDAO extends BasicDAO<App, String> implements BaseDAO<App> {
 
     @Override
     public List<App> fetchById(List<String> entityIdsList) {
-        List<ObjectId> objectIds = new ArrayList<>();
+        List<String> objectIds = new ArrayList<>();
         for (String id : entityIdsList) {
-            objectIds.add(new ObjectId(id));
+            objectIds.add(id);
         }
 
         Query<App> query = this.createQuery().field(Mapper.ID_KEY).in(objectIds);
@@ -96,7 +101,7 @@ public class AppDAO extends BasicDAO<App, String> implements BaseDAO<App> {
         }
 
         List<DBObject> dbObjects = cursor.toArray();
-        for (DBObject dbObject: dbObjects) {
+        for (DBObject dbObject : dbObjects) {
             App course = morphia.fromDBObject(App.class, dbObject);
             courses.add(course);
         }

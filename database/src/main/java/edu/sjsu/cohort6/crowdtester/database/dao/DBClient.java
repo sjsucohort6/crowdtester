@@ -25,11 +25,15 @@ import org.mongodb.morphia.Morphia;
 public interface DBClient extends AutoCloseable {
     // Common operations which don't belong in entities.
     void dropDB(String dbName);
+
     void useDB(String dbName);
+
     boolean checkHealth();
+
     String getConnectString();
 
     // Gets the entity DAO instance.
     Object getDAO(Class<? extends BaseDAO> clazz);
+
     Morphia getMorphia();
 }

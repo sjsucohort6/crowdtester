@@ -61,7 +61,7 @@ public abstract class DBTest<T extends BaseDAO, S> {
     @Parameters({"server", "port", "dbName"})
     public void setUp(@Optional("localhost") String server,
                       @Optional("27017") String port,
-                      @Optional("testreg") String dbName) throws Exception {
+                      @Optional("crowd_tester_testdb") String dbName) throws Exception {
         client = dbFactory.create(server, Integer.parseInt(port), dbName);
 
         this.dbName = dbName;
@@ -117,13 +117,14 @@ public abstract class DBTest<T extends BaseDAO, S> {
 
     public static User testCreateUser() {
         User user = getTestUser();
-        UserDAO userDAO = (UserDAO)client.getDAO(UserDAO.class);
+        UserDAO userDAO = (UserDAO) client.getDAO(UserDAO.class);
         List<User> usersList = new ArrayList<>();
         usersList.add(user);
         List<String> insertedIds = userDAO.add(usersList);
         log.info("User: " + user);
         List<User> users = userDAO.fetchById(insertedIds);
         Assert.assertNotNull(users);
+        Assert.assertTrue(!users.isEmpty());
         log.info("User created: " + users);
         return users.get(0);
     }

@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2015 San Jose State University.    Permission is hereby granted, free of charge, to any person obtaining a copy  of this software and associated documentation files (the "Software"), to deal  in the Software without restriction, including without limitation the rights  to use, copy, modify, merge, publish, distribute, sublicense, and/or sell  copies of the Software, and to permit persons to whom the Software is  furnished to do so, subject to the following conditions:    The above copyright notice and this permission notice shall be included in  all copies or substantial portions of the Software.
+ */
+
 package edu.sjsu.cohort6.crowdtester.database.dao.mongodb;
 
 import com.mongodb.DBCursor;
@@ -33,7 +37,7 @@ public class BugDAO extends BasicDAO<Bug, String> implements BaseDAO<Bug> {
     public List<String> add(List<Bug> entityList) {
         List<String> insertedIds = new ArrayList<>();
         if (entityList != null) {
-            for (Bug bug: entityList) {
+            for (Bug bug : entityList) {
                 Key<Bug> key = this.save(bug);
                 insertedIds.add(key.getId().toString());
             }
@@ -44,9 +48,9 @@ public class BugDAO extends BasicDAO<Bug, String> implements BaseDAO<Bug> {
 
     @Override
     public long remove(List<String> entityIdsList) {
-        List<ObjectId> objectIds = new ArrayList<>();
+        List<String> objectIds = new ArrayList<>();
         for (String id : entityIdsList) {
-            objectIds.add(new ObjectId(id));
+            objectIds.add(id);
         }
         Query<Bug> query = this.createQuery().field(Mapper.ID_KEY).in(objectIds);
         return this.deleteByQuery(query).getN();
@@ -69,9 +73,9 @@ public class BugDAO extends BasicDAO<Bug, String> implements BaseDAO<Bug> {
 
     @Override
     public List<Bug> fetchById(List<String> entityIdsList) {
-        List<ObjectId> objectIds = new ArrayList<>();
+        List<String> objectIds = new ArrayList<>();
         for (String id : entityIdsList) {
-            objectIds.add(new ObjectId(id));
+            objectIds.add(id);
         }
 
         Query<Bug> query = this.createQuery().field(Mapper.ID_KEY).in(objectIds);
@@ -92,7 +96,7 @@ public class BugDAO extends BasicDAO<Bug, String> implements BaseDAO<Bug> {
         }
 
         List<DBObject> dbObjects = cursor.toArray();
-        for (DBObject dbObject: dbObjects) {
+        for (DBObject dbObject : dbObjects) {
             Bug course = morphia.fromDBObject(Bug.class, dbObject);
             courses.add(course);
         }

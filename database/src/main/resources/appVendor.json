@@ -1,15 +1,19 @@
 {
   "_id": "561037bad7156c1073748b82",
-  "name" : "Acme Corp",
+  "name": "Acme Corp",
   "dateJoined": "2015-10-10T17:30:00Z",
   "apps": [
     {
       "name": "Mobile App1",
       "description": "Game app",
-      "appLocationUrl" : "/files/561037bad7156c1073748b82/app1.apk",
-      "supportedPlatforms" : [
-        { "platform" : "ANDROID" },
-        { "platform" : "IOS" }
+      "appLocationUrl": "/files/561037bad7156c1073748b82/app1.apk",
+      "supportedPlatforms": [
+        {
+          "platform": "ANDROID"
+        },
+        {
+          "platform": "IOS"
+        }
       ]
     }
   ]

@@ -35,7 +35,7 @@ import java.util.List;
 
 /**
  * User DAO.
- *
+ * <p>
  * Implements BaseDAO methods for the User entity.
  *
  * @author rwatsh on 9/24/15.
@@ -54,7 +54,7 @@ public class UserDAO extends BasicDAO<User, String> implements BaseDAO<User> {
         List<String> insertedIds = new ArrayList<>();
 
         if (entityList != null) {
-            for (User user: entityList) {
+            for (User user : entityList) {
                 Key<User> key = this.save(user);
                 insertedIds.add(key.getId().toString());
             }
@@ -64,9 +64,9 @@ public class UserDAO extends BasicDAO<User, String> implements BaseDAO<User> {
 
     @Override
     public long remove(List<String> entityIdsList) {
-        List<ObjectId> objectIds = new ArrayList<>();
+        List<String> objectIds = new ArrayList<>();
         for (String id : entityIdsList) {
-            objectIds.add(new ObjectId(id));
+            objectIds.add(id);
         }
         Query<User> query = this.createQuery().field(Mapper.ID_KEY).in(objectIds);
         return this.deleteByQuery(query).getN();
@@ -88,14 +88,14 @@ public class UserDAO extends BasicDAO<User, String> implements BaseDAO<User> {
 
     @Override
     public List<User> fetchById(List<String> entityIdsList) {
-        List<ObjectId> objectIds = new ArrayList<>();
-        Query<User> query =  null;
+        List<String> objectIds = new ArrayList<>();
+        Query<User> query = null;
 
         if (entityIdsList != null) {
             for (String id : entityIdsList) {
                 if (id != null) {
                     //id = CommonUtils.sanitizeIdString(id);
-                    objectIds.add(new ObjectId(id));
+                    objectIds.add(id);
                 }
             }
         }
@@ -119,7 +119,7 @@ public class UserDAO extends BasicDAO<User, String> implements BaseDAO<User> {
         }
 
         List<DBObject> dbObjects = cursor.toArray();
-        for (DBObject dbObject: dbObjects) {
+        for (DBObject dbObject : dbObjects) {
             User user = morphia.fromDBObject(User.class, dbObject);
             users.add(user);
         }
@@ -134,7 +134,7 @@ public class UserDAO extends BasicDAO<User, String> implements BaseDAO<User> {
      * @return
      */
     public Optional<User> getUserByCredentials(String username, String password) throws RuntimeException {
-        Query<User> query =  this.createQuery().field("userName").equal(username).field("token").equal(password);
+        Query<User> query = this.createQuery().field("userName").equal(username).field("token").equal(password);
         QueryResults<User> results = this.find(query);
         if (results != null) {
             return Optional.fromNullable(results.get());

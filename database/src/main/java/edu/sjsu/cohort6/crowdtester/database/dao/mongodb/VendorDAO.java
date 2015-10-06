@@ -34,7 +34,7 @@ public class VendorDAO extends BasicDAO<Vendor, String> implements BaseDAO<Vendo
         List<String> insertedIds = new ArrayList<>();
 
         if (entityList != null) {
-            for (Vendor vendor: entityList) {
+            for (Vendor vendor : entityList) {
                 Key<Vendor> key = this.save(vendor);
                 insertedIds.add(key.getId().toString());
             }
@@ -44,9 +44,9 @@ public class VendorDAO extends BasicDAO<Vendor, String> implements BaseDAO<Vendo
 
     @Override
     public long remove(List<String> entityIdsList) {
-        List<ObjectId> objectIds = new ArrayList<>();
+        List<String> objectIds = new ArrayList<>();
         for (String id : entityIdsList) {
-            objectIds.add(new ObjectId(id));
+            objectIds.add(id);
         }
         Query<Vendor> query = this.createQuery().field(Mapper.ID_KEY).in(objectIds);
         return this.deleteByQuery(query).getN();
@@ -70,14 +70,14 @@ public class VendorDAO extends BasicDAO<Vendor, String> implements BaseDAO<Vendo
 
     @Override
     public List<Vendor> fetchById(List<String> entityIdsList) {
-        List<ObjectId> objectIds = new ArrayList<>();
-        Query<Vendor> query =  null;
+        List<String> objectIds = new ArrayList<>();
+        Query<Vendor> query = null;
 
         if (entityIdsList != null) {
             for (String id : entityIdsList) {
                 if (id != null) {
                     //id = CommonUtils.sanitizeIdString(id);
-                    objectIds.add(new ObjectId(id));
+                    objectIds.add(id);
                 }
             }
         }
@@ -101,7 +101,7 @@ public class VendorDAO extends BasicDAO<Vendor, String> implements BaseDAO<Vendo
         }
 
         List<DBObject> dbObjects = cursor.toArray();
-        for (DBObject dbObject: dbObjects) {
+        for (DBObject dbObject : dbObjects) {
             Vendor user = morphia.fromDBObject(Vendor.class, dbObject);
             users.add(user);
         }

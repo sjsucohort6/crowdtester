@@ -21,15 +21,20 @@ public class MongoDBClient implements DBClient {
     private Morphia morphia = null;
     private MongoClient mongoClient;
     private Datastore morphiaDatastore;
+    private AppDAO appDAO;
+    private BugDAO bugDAO;
+    private UserDAO userDAO;
+    private VendorDAO vendorDAO;
+    private TesterDAO testerDAO;
 
     /**
      * Constructs a MongoDB client instance.
-     *
+     * <p>
      * This is private so it can only be instantiated via DI (using Guice).
      *
-     * @param server    server hostname or ip
-     * @param port      port number for mongodb service
-     * @param dbName    name of db to use
+     * @param server server hostname or ip
+     * @param port   port number for mongodb service
+     * @param dbName name of db to use
      */
     @Inject
     private MongoDBClient(@Assisted("server") String server, @Assisted("port") int port, @Assisted("dbName") String dbName) {
@@ -40,6 +45,11 @@ public class MongoDBClient implements DBClient {
         morphia = new Morphia();
         morphia.mapPackageFromClass(App.class);
         morphiaDatastore = morphia.createDatastore(mongoClient, dbName);
+        appDAO = new AppDAO(mongoClient, morphia, dbName);
+        bugDAO = new BugDAO(mongoClient, morphia, dbName);
+        userDAO = new UserDAO(mongoClient, morphia, dbName);
+        vendorDAO = new VendorDAO(mongoClient, morphia, dbName);
+        testerDAO = new TesterDAO(mongoClient, morphia, dbName);
     }
 
     @Override
@@ -58,7 +68,7 @@ public class MongoDBClient implements DBClient {
         try {
             mongoClient.listDatabaseNames();
             return true;
-        } catch(Exception e) {
+        } catch (Exception e) {
             return false;
         }
     }
@@ -71,6 +81,19 @@ public class MongoDBClient implements DBClient {
 
     @Override
     public Object getDAO(Class<? extends BaseDAO> clazz) {
+        if (clazz != null) {
+            if (clazz.getTypeName().equalsIgnoreCase(AppDAO.class.getTypeName())) {
+                return appDAO;
+            } else if (clazz.getTypeName().equalsIgnoreCase(BugDAO.class.getTypeName())) {
+                return bugDAO;
+            } else if (clazz.getTypeName().equalsIgnoreCase(UserDAO.class.getTypeName())) {
+                return userDAO;
+            } else if (clazz.getTypeName().equalsIgnoreCase(VendorDAO.class.getTypeName())) {
+                return vendorDAO;
+            } else if (clazz.getTypeName().equalsIgnoreCase(TesterDAO.class.getTypeName())) {
+                return testerDAO;
+            }
+        }
         return null;
     }
 
