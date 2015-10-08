@@ -18,6 +18,7 @@ import edu.sjsu.cohort6.crowdtester.common.model.entity.User;
 import edu.sjsu.cohort6.crowdtester.database.dao.mongodb.UserDAO;
 import org.testng.Assert;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -30,22 +31,34 @@ public class UserDAOTest extends DBTest<UserDAO, User> {
 
     @Override
     public void testAdd() {
-        testCreateUser();
+        User user = testCreateUser();
+        Assert.assertNotNull(user);
     }
 
     @Override
     public void testRemove() throws Exception {
-
+        User user = testCreateUser();
+        Assert.assertNotNull(user);
+        long num = dao.remove(new ArrayList<String>() {{
+            add(user.getId());
+        }});
+        Assert.assertTrue(num > 0);
     }
 
     @Override
     public void testUpdate() throws Exception {
-
+        User user = testCreateUser();
+        Assert.assertNotNull(user);
+        user.setEmailId("test@test.com");
+        dao.update(new ArrayList<User>() {{
+            add(user);
+        }});
     }
 
     @Override
     public void testFetch() throws Exception {
-        testCreateUser();
+        User user = testCreateUser();
+        Assert.assertNotNull(user);
         List<User> users = dao.fetchById(null);
         log.info(users.toString());
         Assert.assertNotNull(users);

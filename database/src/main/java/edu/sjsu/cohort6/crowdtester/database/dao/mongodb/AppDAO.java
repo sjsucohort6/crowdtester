@@ -90,7 +90,7 @@ public class AppDAO extends BasicDAO<App, String> implements BaseDAO<App> {
 
     @Override
     public List<App> fetch(String query) {
-        List<App> courses = new ArrayList<>();
+        List<App> apps = new ArrayList<>();
         DBObject dbObjQuery;
         DBCursor cursor;
         if (!(query == null)) {
@@ -102,9 +102,9 @@ public class AppDAO extends BasicDAO<App, String> implements BaseDAO<App> {
 
         List<DBObject> dbObjects = cursor.toArray();
         for (DBObject dbObject : dbObjects) {
-            App course = morphia.fromDBObject(App.class, dbObject);
-            courses.add(course);
+            App app = morphia.fromDBObject(App.class, dbObject);
+            apps.add(app);
         }
-        return courses;
+        return apps;
     }
 }

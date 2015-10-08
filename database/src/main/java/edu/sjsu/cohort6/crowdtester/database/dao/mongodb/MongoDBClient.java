@@ -45,6 +45,7 @@ public class MongoDBClient implements DBClient {
         morphia = new Morphia();
         morphia.mapPackageFromClass(App.class);
         morphiaDatastore = morphia.createDatastore(mongoClient, dbName);
+        morphiaDatastore.ensureIndexes();
         appDAO = new AppDAO(mongoClient, morphia, dbName);
         bugDAO = new BugDAO(mongoClient, morphia, dbName);
         userDAO = new UserDAO(mongoClient, morphia, dbName);
@@ -60,7 +61,7 @@ public class MongoDBClient implements DBClient {
     @Override
     public void useDB(String dbName) {
         morphiaDatastore = morphia.createDatastore(mongoClient, dbName);
-
+        morphiaDatastore.ensureIndexes();
     }
 
     @Override

@@ -7,6 +7,7 @@ import org.bson.types.ObjectId;
 import org.mongodb.morphia.annotations.Embedded;
 import org.mongodb.morphia.annotations.Entity;
 import org.mongodb.morphia.annotations.Id;
+import org.mongodb.morphia.annotations.Indexed;
 
 import java.util.Date;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
 public class App extends BaseModel {
     @Id
     private String id = new ObjectId().toHexString();
+    @Indexed(unique = true)
     private String name;
     private String description;
 
@@ -151,7 +153,6 @@ public class App extends BaseModel {
                 ", projectEndDate=" + projectEndDate +
                 ", testers=" + testers +
                 ", appIncentivePolicy=" + appIncentivePolicy +
-                ", appVendor=" + appVendor +
                 '}';
     }
 }

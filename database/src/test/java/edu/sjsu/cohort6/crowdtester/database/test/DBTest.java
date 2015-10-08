@@ -17,9 +17,8 @@ package edu.sjsu.cohort6.crowdtester.database.test;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.Module;
-import edu.sjsu.cohort6.crowdtester.common.model.Role;
-import edu.sjsu.cohort6.crowdtester.common.model.RoleType;
-import edu.sjsu.cohort6.crowdtester.common.model.entity.User;
+import edu.sjsu.cohort6.crowdtester.common.model.*;
+import edu.sjsu.cohort6.crowdtester.common.model.entity.*;
 import edu.sjsu.cohort6.crowdtester.database.dao.BaseDAO;
 import edu.sjsu.cohort6.crowdtester.database.dao.DBClient;
 import edu.sjsu.cohort6.crowdtester.database.dao.DBFactory;
@@ -27,11 +26,11 @@ import edu.sjsu.cohort6.crowdtester.database.dao.DatabaseModule;
 import edu.sjsu.cohort6.crowdtester.database.dao.mongodb.UserDAO;
 import org.testng.Assert;
 import org.testng.annotations.*;
+import org.testng.annotations.Optional;
 
 import java.lang.reflect.ParameterizedType;
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.logging.Logger;
 
 /**
@@ -46,7 +45,7 @@ public abstract class DBTest<T extends BaseDAO, S> {
     protected T dao;
     private Class<T> tClass;
 
-    public String dbName = "testreg";
+    public String dbName = "crowd_tester_testdb";
     private static final Logger log = Logger.getLogger(DBTest.class.getName());
     protected static DBClient client;
     private long startTime;
@@ -130,6 +129,101 @@ public abstract class DBTest<T extends BaseDAO, S> {
     }
 
     public static User getTestUser() {
-        return new User("john.doe@sjsu.edu", "john.doe@sjsu.edu", "John", "Doe", new Role(RoleType.TESTER));
+        Random rand = new Random();
+        String randomStr = Integer.toString(rand.nextInt());
+        return new User("john.doe@sjsu.edu" + randomStr, "john.doe@sjsu.edu" + randomStr, "John" + randomStr, "Doe", new Role(RoleType.TESTER));
+    }
+
+    public static Tester testCreateTester() {
+        Tester tester = new Tester();
+        tester.setCreditPoint(0);
+        tester.setSkills(new ArrayList<Skill>() {
+            {
+                add(new Skill("IOS"));
+                add(new Skill("Android"));
+                add(new Skill("Java"));
+            }});
+        tester.setUser(testCreateUser());
+        return tester;
+    }
+
+
+    public static App testCreateApp(Vendor vendor, Tester tester) {
+        App app = new App();
+        app.setName("CoolApp");
+        app.setAppFileName("/files/coolapp.zip");
+        app.setAppIncentivePolicy(getIncentivePolicy());
+        app.setAppVendor(vendor);
+        app.setDescription("Very cool app");
+        app.setProjectEndDate(getDateNDaysFromNow(20));
+        app.setProjectStartDate(getDateNDaysFromNow(2));
+        app.setSupportedPlatforms(new ArrayList<Platform>() {{
+            add(Platform.ANDROID);
+            add(Platform.IOS);
+        }});
+        app.setTesters(new ArrayList<Tester>() {{
+            add(tester);
+        }});
+        return app;
+    }
+
+    private static Date getDateNDaysFromNow(int x) {
+        Calendar cal = GregorianCalendar.getInstance();
+        cal.add( Calendar.DAY_OF_YEAR, x);
+        Date nDaysFromNow = cal.getTime();
+        return nDaysFromNow;
+    }
+
+    public static Vendor testCreateVendor() {
+        Vendor vendor = new Vendor();
+        // Will be set after app is created for this vendor.
+        // Caller needs to tie in this.
+        vendor.setApps(new ArrayList<App>() {{}});
+        vendor.setChargeBackPolicy(getVendorChargeBackPolicy());
+        vendor.setDateJoined(new Date());
+        vendor.setIncentivePolicy(getIncentivePolicy());
+        vendor.setName("Acme Corp");
+        vendor.setUser(testCreateUser());
+        return vendor;
+    }
+
+    public static Bug testCreateBug(App a, Tester t) {
+        Bug b = new Bug();
+        b.setApp(a);
+        b.setBugSeverity(Severity.HIGH);
+        b.setBugStatus(BugStatus.OPEN);
+        b.setTester(t);
+        b.setValidBug(false);
+        return b;
+    }
+
+    public static Bug testCreateBug() {
+        Tester t = testCreateTester();
+        Vendor v = testCreateVendor();
+        App a = testCreateApp(v, t);
+        return testCreateBug(a, t);
+    }
+
+    public static App testCreateApp() {
+        Vendor v = testCreateVendor();
+        Tester t = testCreateTester();
+        App a = testCreateApp(v, t);
+        v.setApps(new ArrayList<App>() {{add(a);}} );
+        return a;
+    }
+
+    private static IncentivePolicy getIncentivePolicy() {
+
+        IncentivePolicy incentivePolicy = new IncentivePolicy();
+        incentivePolicy.setIncentivePerHighBugFiled(100.0);
+        incentivePolicy.setIncentivePerMediumBugFiled(50.0);
+        incentivePolicy.setIncentivePerLowBugFiled(20.0);
+        return incentivePolicy;
+    }
+
+    private static VendorChargeBackPolicy getVendorChargeBackPolicy() {
+        VendorChargeBackPolicy vendorChargeBackPolicy = new VendorChargeBackPolicy();
+        vendorChargeBackPolicy.setCostPerDay(20.0);
+        return vendorChargeBackPolicy;
     }
 }

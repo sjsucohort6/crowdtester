@@ -6,28 +6,61 @@ package edu.sjsu.cohort6.crowdtester.database.test;
 
 import edu.sjsu.cohort6.crowdtester.common.model.entity.App;
 import edu.sjsu.cohort6.crowdtester.database.dao.mongodb.AppDAO;
+import org.testng.Assert;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * @author rwatsh on 10/6/15.
  */
 public class AppDAOTest extends DBTest<AppDAO, App> {
+    private static final Logger log = Logger.getLogger(AppDAOTest.class.getName());
+
     @Override
     public void testAdd() throws Exception {
+        App a = getApp();
+        log.info("Created app: " + a);
+        Assert.assertNotNull(a);
+    }
 
+    private App getApp() {
+        App a = testCreateApp();
+        List<String> insertedIds = dao.add(new ArrayList<App>() {{add(a);}});
+        List<App> apps = dao.fetchById(insertedIds);
+        return apps.get(0);
     }
 
     @Override
     public void testRemove() throws Exception {
-
+        App a = getApp();
+        dao.remove(new ArrayList<String>() {{add(a.getId());}});
+        log.info("Deleted app: " + a);
     }
 
     @Override
     public void testUpdate() throws Exception {
-
+        App a = getApp();
+        a.setDescription("updated description");
+        dao.update(new ArrayList<App>() {{
+            add(a);
+        }});
+        List<App> apps = dao.fetchById(new ArrayList<String>() {{
+            add(a.getId());
+        }});
+        Assert.assertNotNull(apps);
+        log.info(apps.toString());
     }
 
     @Override
     public void testFetch() throws Exception {
+        App a = getApp();
 
+        List<App> apps = dao.fetchById(new ArrayList<String>() {{
+            add(a.getId());
+        }});
+        Assert.assertNotNull(apps);
+        log.info(apps.toString());
     }
 }

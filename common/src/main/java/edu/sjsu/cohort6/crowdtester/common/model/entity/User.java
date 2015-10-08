@@ -19,7 +19,6 @@ import edu.sjsu.cohort6.crowdtester.common.model.BaseModel;
 import edu.sjsu.cohort6.crowdtester.common.model.Role;
 import edu.sjsu.cohort6.crowdtester.common.model.RoleType;
 import org.bson.types.ObjectId;
-import org.hibernate.validator.constraints.Email;
 import org.mongodb.morphia.annotations.*;
 
 import javax.validation.constraints.NotNull;
@@ -40,8 +39,6 @@ public class User extends BaseModel {
     private String id = new ObjectId().toHexString();
 
     @Indexed(unique = true)
-    @NotNull
-    @Email
     private String emailId;
     @NotNull
     private String userName;
