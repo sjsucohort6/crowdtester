@@ -23,7 +23,7 @@ import edu.sjsu.cohort6.crowdtester.database.dao.BaseDAO;
 import edu.sjsu.cohort6.crowdtester.database.dao.DBClient;
 import edu.sjsu.cohort6.crowdtester.database.dao.DBFactory;
 import edu.sjsu.cohort6.crowdtester.database.dao.DatabaseModule;
-import edu.sjsu.cohort6.crowdtester.database.dao.mongodb.UserDAO;
+import edu.sjsu.cohort6.crowdtester.database.dao.mongodb.*;
 import org.testng.Assert;
 import org.testng.annotations.*;
 import org.testng.annotations.Optional;
@@ -129,9 +129,13 @@ public abstract class DBTest<T extends BaseDAO, S> {
     }
 
     public static User getTestUser() {
-        Random rand = new Random();
-        String randomStr = Integer.toString(rand.nextInt());
+        String randomStr = getRandomStr();
         return new User("john.doe@sjsu.edu" + randomStr, "john.doe@sjsu.edu" + randomStr, "John" + randomStr, "Doe", new Role(RoleType.TESTER));
+    }
+
+    private static String getRandomStr() {
+        Random rand = new Random();
+        return Integer.toString(rand.nextInt());
     }
 
     public static Tester testCreateTester() {
@@ -144,13 +148,19 @@ public abstract class DBTest<T extends BaseDAO, S> {
                 add(new Skill("Java"));
             }});
         tester.setUser(testCreateUser());
-        return tester;
+        TesterDAO testerDAO = (TesterDAO) client.getDAO(TesterDAO.class);
+        List<String> insertedIds = testerDAO.add(new ArrayList<Tester>() {{
+            add(tester);
+        }});
+        List<Tester> testers = testerDAO.fetchById(insertedIds);
+        Assert.assertTrue(testers != null && !testers.isEmpty());
+        return testers.get(0);
     }
 
 
     public static App testCreateApp(Vendor vendor, Tester tester) {
         App app = new App();
-        app.setName("CoolApp");
+        app.setName("CoolApp" + getRandomStr());
         app.setAppFileName("/files/coolapp.zip");
         app.setAppIncentivePolicy(getIncentivePolicy());
         app.setAppVendor(vendor);
@@ -164,10 +174,16 @@ public abstract class DBTest<T extends BaseDAO, S> {
         app.setTesters(new ArrayList<Tester>() {{
             add(tester);
         }});
-        return app;
+        AppDAO appDAO = (AppDAO) client.getDAO(AppDAO.class);
+        List<String> insertedIds = appDAO.add(new ArrayList<App>() {{
+            add(app);
+        }});
+        List<App> apps = appDAO.fetchById(insertedIds);
+        Assert.assertTrue(apps != null && !apps.isEmpty());
+        return apps.get(0);
     }
 
-    private static Date getDateNDaysFromNow(int x) {
+    public static Date getDateNDaysFromNow(int x) {
         Calendar cal = GregorianCalendar.getInstance();
         cal.add( Calendar.DAY_OF_YEAR, x);
         Date nDaysFromNow = cal.getTime();
@@ -182,9 +198,14 @@ public abstract class DBTest<T extends BaseDAO, S> {
         vendor.setChargeBackPolicy(getVendorChargeBackPolicy());
         vendor.setDateJoined(new Date());
         vendor.setIncentivePolicy(getIncentivePolicy());
-        vendor.setName("Acme Corp");
+        vendor.setName("Acme Corp" + getRandomStr());
         vendor.setUser(testCreateUser());
-        return vendor;
+        VendorDAO vendorDAO = (VendorDAO) client.getDAO(VendorDAO.class);
+        List<String> insertedIds = vendorDAO.add(new ArrayList<Vendor>(){{add(vendor);}});
+        Assert.assertNotNull(insertedIds);
+        List<Vendor> vendors = vendorDAO.fetchById(insertedIds);
+        Assert.assertNotNull(vendors);
+        return vendors.get(0);
     }
 
     public static Bug testCreateBug(App a, Tester t) {
@@ -194,7 +215,14 @@ public abstract class DBTest<T extends BaseDAO, S> {
         b.setBugStatus(BugStatus.OPEN);
         b.setTester(t);
         b.setValidBug(false);
-        return b;
+        b.setCreatedOn(new Date());
+        BugDAO bugDAO = (BugDAO) client.getDAO(BugDAO.class);
+        List<String> insertedIds = bugDAO.add(new ArrayList<Bug>() {{
+            add(b);
+        }});
+        List<Bug> bugs = bugDAO.fetchById(insertedIds);
+        Assert.assertTrue(bugs != null && !bugs.isEmpty());
+        return bugs.get(0);
     }
 
     public static Bug testCreateBug() {
@@ -209,6 +237,10 @@ public abstract class DBTest<T extends BaseDAO, S> {
         Tester t = testCreateTester();
         App a = testCreateApp(v, t);
         v.setApps(new ArrayList<App>() {{add(a);}} );
+        VendorDAO vendorDAO = (VendorDAO) client.getDAO(VendorDAO.class);
+        vendorDAO.update(new ArrayList<Vendor>() {{
+            add(v);
+        }});
         return a;
     }
 

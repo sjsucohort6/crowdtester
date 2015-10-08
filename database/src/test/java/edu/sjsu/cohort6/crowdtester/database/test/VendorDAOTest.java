@@ -6,28 +6,49 @@ package edu.sjsu.cohort6.crowdtester.database.test;
 
 import edu.sjsu.cohort6.crowdtester.common.model.entity.Vendor;
 import edu.sjsu.cohort6.crowdtester.database.dao.mongodb.VendorDAO;
+import org.testng.Assert;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * @author rwatsh on 10/6/15.
  */
 public class VendorDAOTest extends DBTest<VendorDAO, Vendor> {
+    private static final Logger log = Logger.getLogger(VendorDAOTest.class.getName());
     @Override
     public void testAdd() throws Exception {
-
+        Vendor v = testCreateVendor();
+        Assert.assertNotNull(v);
     }
 
     @Override
     public void testRemove() throws Exception {
-
+        Vendor v = testCreateVendor();
+        long n = dao.remove(new ArrayList<String>(){{add(v.getId());}});
+        Assert.assertTrue(n > 0);
     }
 
     @Override
     public void testUpdate() throws Exception {
-
+        Vendor v = testCreateVendor();
+        log.info(v.toString());
+        Date dateJoined = getDateNDaysFromNow(-20);
+        v.setDateJoined(dateJoined);
+        dao.update(new ArrayList<Vendor>(){{add(v);}});
+        log.info("Updated date to: " + dateJoined);
+        log.info(v.toString());
     }
 
     @Override
     public void testFetch() throws Exception {
-
+        Vendor v = testCreateVendor();
+        Assert.assertNotNull(v);
+        List<Vendor> vendors = dao.fetchById(new ArrayList<String>() {{
+            add(v.getId());
+        }});
+        Assert.assertTrue(vendors != null && !vendors.isEmpty());
     }
 }

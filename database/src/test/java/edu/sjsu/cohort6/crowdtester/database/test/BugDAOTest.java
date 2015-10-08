@@ -6,28 +6,53 @@ package edu.sjsu.cohort6.crowdtester.database.test;
 
 import edu.sjsu.cohort6.crowdtester.common.model.entity.Bug;
 import edu.sjsu.cohort6.crowdtester.database.dao.mongodb.BugDAO;
+import org.testng.Assert;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * @author rwatsh on 10/6/15.
  */
 public class BugDAOTest extends DBTest<BugDAO, Bug> {
+    private static final Logger log = Logger.getLogger(BugDAOTest.class.getName());
+
     @Override
     public void testAdd() throws Exception {
+        Bug b = getBug();
+        log.info(b.toString());
+        Assert.assertNotNull(b);
+    }
 
+    private Bug getBug() {
+        Bug a = testCreateBug();
+        return a;
     }
 
     @Override
     public void testRemove() throws Exception {
-
+        Bug b = getBug();
+        long n = dao.remove(new ArrayList<String>() {{
+            add(b.getId());
+        }});
+        Assert.assertTrue(n > 0);
     }
 
     @Override
     public void testUpdate() throws Exception {
-
+        Bug b = getBug();
+        b.setValidBug(true);
+        dao.update(new ArrayList<Bug>(){{add(b);}});
     }
 
     @Override
     public void testFetch() throws Exception {
-
+        Bug b = getBug();
+        List<Bug> bugs = dao.fetchById(new ArrayList<String>() {{
+            add(b.getId());
+        }});
+        Assert.assertNotNull(bugs);
+        Assert.assertNotNull(bugs.get(0));
     }
 }

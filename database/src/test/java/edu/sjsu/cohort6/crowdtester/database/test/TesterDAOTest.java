@@ -6,6 +6,10 @@ package edu.sjsu.cohort6.crowdtester.database.test;
 
 import edu.sjsu.cohort6.crowdtester.common.model.entity.Tester;
 import edu.sjsu.cohort6.crowdtester.database.dao.mongodb.TesterDAO;
+import org.testng.Assert;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author rwatsh on 10/6/15.
@@ -13,21 +17,34 @@ import edu.sjsu.cohort6.crowdtester.database.dao.mongodb.TesterDAO;
 public class TesterDAOTest extends DBTest<TesterDAO, Tester> {
     @Override
     public void testAdd() throws Exception {
-
+        Tester t = testCreateTester();
+        Assert.assertNotNull(t);
     }
 
     @Override
     public void testRemove() throws Exception {
-
+        Tester t = testCreateTester();
+        Assert.assertNotNull(t);
+        long n = dao.remove(new ArrayList<String>() {{
+            add(t.getId());
+        }});
+        Assert.assertTrue(n > 0);
     }
 
     @Override
     public void testUpdate() throws Exception {
-
+        Tester t = testCreateTester();
+        t.setCreditPoint(10);
+        dao.update(new ArrayList<Tester>(){{add(t);}});
     }
 
     @Override
     public void testFetch() throws Exception {
+        Tester t = testCreateTester();
+        List<Tester> testers = dao.fetchById(new ArrayList<String>() {{
+            add(t.getId());
+        }});
 
+        Assert.assertTrue(testers != null && !testers.isEmpty());
     }
 }

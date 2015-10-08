@@ -27,9 +27,7 @@ public class AppDAOTest extends DBTest<AppDAO, App> {
 
     private App getApp() {
         App a = testCreateApp();
-        List<String> insertedIds = dao.add(new ArrayList<App>() {{add(a);}});
-        List<App> apps = dao.fetchById(insertedIds);
-        return apps.get(0);
+        return a;
     }
 
     @Override
