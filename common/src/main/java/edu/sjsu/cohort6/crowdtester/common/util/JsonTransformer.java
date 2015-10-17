@@ -20,23 +20,21 @@
  * THE SOFTWARE.
  */
 
-package edu.sjsu.cohort6.crowdtester.database.dao;
+package edu.sjsu.cohort6.crowdtester.common.util;
 
-import java.util.List;
+import com.google.gson.Gson;
+import spark.ResponseTransformer;
 
 /**
- * Generic DAO interface for basic CRUD operations on entity T.
- *
- * @author rwatsh on 9/24/15.
+ * @author rwatsh on 10/14/15.
  */
-public interface BaseDAO<T> {
-    List<String> add(List<T> entityList);
+public class JsonTransformer implements ResponseTransformer {
 
-    long remove(List<String> entityIdsList);
+    private Gson gson = new Gson();
 
-    void update(List<T> entityList);
+    @Override
+    public String render(Object model) {
+        return gson.toJson(model);
+    }
 
-    List<T> fetchById(List<String> entityIdsList);
-
-    List<T> fetch(String jsonQueryString);
 }

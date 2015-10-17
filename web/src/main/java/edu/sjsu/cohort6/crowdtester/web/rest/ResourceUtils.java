@@ -20,23 +20,35 @@
  * THE SOFTWARE.
  */
 
-package edu.sjsu.cohort6.crowdtester.database.dao;
+package edu.sjsu.cohort6.crowdtester.web.rest;
 
-import java.util.List;
+import freemarker.template.Configuration;
+import freemarker.template.DefaultObjectWrapper;
+import freemarker.template.TemplateExceptionHandler;
+import spark.template.freemarker.FreeMarkerEngine;
 
 /**
- * Generic DAO interface for basic CRUD operations on entity T.
- *
- * @author rwatsh on 9/24/15.
+ * @author rwatsh on 10/15/15.
  */
-public interface BaseDAO<T> {
-    List<String> add(List<T> entityList);
+public class ResourceUtils {
 
-    long remove(List<String> entityIdsList);
+    public static FreeMarkerEngine getFreeMarkerEngine() {
+        Configuration config = new Configuration();
+        /**
+         * Let the Spark Freemarker integration class load the template.
+         */
+        config.setClassForTemplateLoading(FreeMarkerEngine.class, "");
+        /**
+         * Add object wrapper.
+         */
+        config.setObjectWrapper(new DefaultObjectWrapper());
+        // Set the preferred charset template files are stored in. UTF-8 is
+        // a good choice in most applications:
+        config.setDefaultEncoding("UTF-8");
 
-    void update(List<T> entityList);
+        // TODO change it to RETHROW_HANDLER in production.
+        config.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
 
-    List<T> fetchById(List<String> entityIdsList);
-
-    List<T> fetch(String jsonQueryString);
+        return new FreeMarkerEngine(config);
+    }
 }

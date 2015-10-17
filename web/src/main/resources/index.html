@@ -20,16 +20,3 @@
   ~ THE SOFTWARE.
   -->
 
-<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-
-<suite name="DBTests" verbose="1">
-    <parameter name="server" value="localhost"/>
-    <parameter name="port" value="27017"/>
-    <parameter name="dbName" value="crowd_tester_testdb"/>
-
-    <test name="DatabaseTests">
-        <packages>
-            <package name="edu.sjsu.cohort6.crowdtester.database.test"/>
-        </packages>
-    </test>
-</suite>

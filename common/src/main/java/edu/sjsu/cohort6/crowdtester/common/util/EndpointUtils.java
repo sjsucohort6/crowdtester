@@ -20,23 +20,12 @@
  * THE SOFTWARE.
  */
 
-package edu.sjsu.cohort6.crowdtester.database.dao;
-
-import java.util.List;
+package edu.sjsu.cohort6.crowdtester.common.util;
 
 /**
- * Generic DAO interface for basic CRUD operations on entity T.
- *
- * @author rwatsh on 9/24/15.
+ * @author rwatsh on 10/14/15.
  */
-public interface BaseDAO<T> {
-    List<String> add(List<T> entityList);
-
-    long remove(List<String> entityIdsList);
-
-    void update(List<T> entityList);
-
-    List<T> fetchById(List<String> entityIdsList);
-
-    List<T> fetch(String jsonQueryString);
+public class EndpointUtils {
+    public static final String ENDPOINT_VERSION = "";
+    public static final String ENDPOINT_ROOT = "/crowdtester";
 }
