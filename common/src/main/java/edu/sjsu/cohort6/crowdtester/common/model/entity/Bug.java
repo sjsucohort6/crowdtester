@@ -61,6 +61,31 @@ public class Bug extends BaseModel {
      */
     private boolean validBug = false;
 
+    private String bugSummary;
+    private String bugDescription;
+
+
+    @JsonProperty
+    public String getBugSummary() {
+        return bugSummary;
+    }
+
+    public void setBugSummary(String bugSummary) {
+        this.bugSummary = bugSummary;
+    }
+
+    @JsonProperty
+    public String getBugDescription() {
+        return bugDescription;
+    }
+
+    public void setBugDescription(String bugDescription) {
+        this.bugDescription = bugDescription;
+    }
+
+
+
+
     @JsonProperty
     public String getId() {
         return id;
@@ -134,6 +159,8 @@ public class Bug extends BaseModel {
                 ", bugSeverity=" + bugSeverity +
                 ", bugStatus=" + bugStatus +
                 ", validBug=" + validBug +
+                ", bugSummary='" + bugSummary + '\'' +
+                ", bugDescription='" + bugDescription + '\'' +
                 '}';
     }
 }

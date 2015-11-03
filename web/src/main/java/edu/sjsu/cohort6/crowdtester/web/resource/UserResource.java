@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-package edu.sjsu.cohort6.crowdtester.web.rest;
+package edu.sjsu.cohort6.crowdtester.web.resource;
 
 import edu.sjsu.cohort6.crowdtester.common.model.entity.User;
 import edu.sjsu.cohort6.crowdtester.common.util.CommonUtils;

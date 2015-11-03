@@ -28,7 +28,9 @@ import com.google.inject.Module;
 import edu.sjsu.cohort6.crowdtester.database.dao.DBClient;
 import edu.sjsu.cohort6.crowdtester.database.dao.DBFactory;
 import edu.sjsu.cohort6.crowdtester.database.dao.DatabaseModule;
-import edu.sjsu.cohort6.crowdtester.web.rest.UserResource;
+import edu.sjsu.cohort6.crowdtester.web.resource.LoginResource;
+import edu.sjsu.cohort6.crowdtester.web.resource.RegisterResource;
+import edu.sjsu.cohort6.crowdtester.web.resource.UserResource;
 
 import static spark.Spark.*;
 
@@ -53,9 +55,10 @@ public class MainController {
     public static void main(String[] args) {
         appInit();
 
-        // Register resources
+        // RegisterResource resources
         UserResource userResource = new UserResource(client);
-
+        LoginResource loginResource = new LoginResource(client);
+        RegisterResource registerResource = new RegisterResource(client);
 
     }
 

@@ -20,35 +20,41 @@
  * THE SOFTWARE.
  */
 
-package edu.sjsu.cohort6.crowdtester.web.rest;
+package edu.sjsu.cohort6.crowdtester.web.resource;
 
-import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.TemplateExceptionHandler;
+import edu.sjsu.cohort6.crowdtester.common.util.EndpointUtils;
+import edu.sjsu.cohort6.crowdtester.database.dao.DBClient;
+import spark.ModelAndView;
 import spark.template.freemarker.FreeMarkerEngine;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import static spark.Spark.get;
+
 /**
- * @author rwatsh on 10/15/15.
+ * @author rwatsh on 10/18/15.
  */
-public class ResourceUtils {
+public class LoginResource {
+    public static final String USERS_PATH = EndpointUtils.ENDPOINT_ROOT + "/login";
+    private final DBClient dbClient;
 
-    public static FreeMarkerEngine getFreeMarkerEngine() {
-        Configuration config = new Configuration();
-        /**
-         * Let the Spark Freemarker integration class load the template.
-         */
-        config.setClassForTemplateLoading(FreeMarkerEngine.class, "");
-        /**
-         * Add object wrapper.
-         */
-        config.setObjectWrapper(new DefaultObjectWrapper());
-        // Set the preferred charset template files are stored in. UTF-8 is
-        // a good choice in most applications:
-        config.setDefaultEncoding("UTF-8");
-
-        // TODO change it to RETHROW_HANDLER in production.
-        config.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
-
-        return new FreeMarkerEngine(config);
+    public LoginResource(DBClient dbClient) {
+        this.dbClient = dbClient;
+        setupEndpoints();
     }
+
+    private void setupEndpoints() {
+        FreeMarkerEngine templateEngine = ResourceUtils.getFreeMarkerEngine();
+
+        get(USERS_PATH, (req, res) -> {
+            Map<String, Object> attributes = new HashMap<>();
+            /*List<User> users = userDAO.fetchById(null);
+            attributes.put("users", users);*/
+
+            return new ModelAndView(attributes, "login.ftl");
+        }, templateEngine);
+    }
+
+
 }
