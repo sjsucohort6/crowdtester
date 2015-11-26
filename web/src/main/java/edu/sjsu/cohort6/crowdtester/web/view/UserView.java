@@ -20,7 +20,7 @@
  * THE SOFTWARE.
  */
 
-package edu.sjsu.cohort6.crowdtester.web.resource;
+package edu.sjsu.cohort6.crowdtester.web.view;
 
 import edu.sjsu.cohort6.crowdtester.common.model.entity.User;
 import edu.sjsu.cohort6.crowdtester.common.util.CommonUtils;
@@ -41,13 +41,13 @@ import static spark.Spark.post;
 /**
  * @author rwatsh on 10/14/15.
  */
-public class UserResource {
+public class UserView {
     public static final String USERS_PATH = EndpointUtils.ENDPOINT_ROOT + "/users";
     private final UserDAO userDAO;
     private final DBClient dbClient;
 
 
-    public UserResource(DBClient dbClient) {
+    public UserView(DBClient dbClient) {
         this.dbClient = dbClient;
         this.userDAO = (UserDAO) dbClient.getDAO(UserDAO.class);
         setupEndpoints();
@@ -55,7 +55,7 @@ public class UserResource {
 
     private void setupEndpoints() {
 
-        FreeMarkerEngine templateEngine = ResourceUtils.getFreeMarkerEngine();
+        FreeMarkerEngine templateEngine = Util.getFreeMarkerEngine();
 
         post(USERS_PATH, "application/json", (request, response) -> {
             String jsonPayload = request.body();

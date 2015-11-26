@@ -20,41 +20,26 @@
  * THE SOFTWARE.
  */
 
-package edu.sjsu.cohort6.crowdtester.web.resource;
+package edu.sjsu.cohort6.crowdtester.web.view;
 
-import edu.sjsu.cohort6.crowdtester.common.util.EndpointUtils;
 import edu.sjsu.cohort6.crowdtester.database.dao.DBClient;
-import spark.ModelAndView;
 import spark.template.freemarker.FreeMarkerEngine;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import static spark.Spark.get;
-
 /**
- * @author rwatsh on 10/18/15.
+ * Base view that all other views extend.
+ *
+ * This ensures all views have a certain route/path to the view template page and has a handle to the DB client.
+ *
+ * @author rwatsh on 11/26/15.
  */
-public class RegisterResource {
-    public static final String USERS_PATH = EndpointUtils.ENDPOINT_ROOT + "/register";
-    private DBClient dbClient;
+public abstract class BaseView {
+    protected String viewPath;
+    protected DBClient dbClient;
+    protected final FreeMarkerEngine templateEngine;
 
-    public RegisterResource(DBClient dbClient) {
+    protected BaseView(String viewPath, DBClient dbClient) {
+        this.viewPath = viewPath;
         this.dbClient = dbClient;
-        setUpEndpoints();
+        templateEngine = Util.getFreeMarkerEngine();
     }
-
-    private void setUpEndpoints() {
-        FreeMarkerEngine templateEngine = ResourceUtils.getFreeMarkerEngine();
-
-        get(USERS_PATH, (req, res) -> {
-            Map<String, Object> attributes = new HashMap<>();
-            /*List<User> users = userDAO.fetchById(null);
-            attributes.put("users", users);*/
-
-            return new ModelAndView(attributes, "register.ftl");
-        }, templateEngine);
-    }
-
-
 }

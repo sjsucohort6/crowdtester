@@ -20,35 +20,20 @@
  * THE SOFTWARE.
  */
 
-package edu.sjsu.cohort6.crowdtester.web.resource;
+package edu.sjsu.cohort6.crowdtester.web.route;
 
-import freemarker.template.Configuration;
-import freemarker.template.DefaultObjectWrapper;
-import freemarker.template.TemplateExceptionHandler;
-import spark.template.freemarker.FreeMarkerEngine;
+import edu.sjsu.cohort6.crowdtester.web.HttpConstants;
+import spark.Request;
+import spark.Response;
+import spark.Route;
 
 /**
- * @author rwatsh on 10/15/15.
+ * @author rwatsh on 11/26/15.
  */
-public class ResourceUtils {
-
-    public static FreeMarkerEngine getFreeMarkerEngine() {
-        Configuration config = new Configuration();
-        /**
-         * Let the Spark Freemarker integration class load the template.
-         */
-        config.setClassForTemplateLoading(FreeMarkerEngine.class, "");
-        /**
-         * Add object wrapper.
-         */
-        config.setObjectWrapper(new DefaultObjectWrapper());
-        // Set the preferred charset template files are stored in. UTF-8 is
-        // a good choice in most applications:
-        config.setDefaultEncoding("UTF-8");
-
-        // TODO change it to RETHROW_HANDLER in production.
-        config.setTemplateExceptionHandler(TemplateExceptionHandler.HTML_DEBUG_HANDLER);
-
-        return new FreeMarkerEngine(config);
+public class RootRoute implements Route {
+    @Override
+    public Object handle(Request request, Response response) throws Exception {
+        response.redirect(HttpConstants.INDEX_PATH);
+        return "";
     }
 }

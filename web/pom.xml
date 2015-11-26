@@ -30,28 +30,58 @@
     <artifactId>web</artifactId>
     <version>1.0-SNAPSHOT</version>
 
+    <properties>
+        <jdk.version>1.8</jdk.version>
+        <spark.version>2.3</spark.version>
+        <jackson.version>2.5.1</jackson.version>
+        <lombok.version>1.16.6</lombok.version>
+        <guava.version>18.0</guava.version>
+        <freemarker.version>2.3.23</freemarker.version>
+    </properties>
+
     <dependencies>
         <!-- Freemarker -->
         <dependency>
             <groupId>org.freemarker</groupId>
             <artifactId>freemarker</artifactId>
-            <version>2.3.23</version>
+            <version>${freemarker.version}</version>
         </dependency>
         <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-template-freemarker</artifactId>
-            <version>2.3</version>
+            <version>${spark.version}</version>
         </dependency>
         <dependency>
             <groupId>com.sparkjava</groupId>
             <artifactId>spark-core</artifactId>
-            <version>2.3</version>
+            <version>${spark.version}</version>
         </dependency>
         <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>${jackson.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
+        </dependency>
+        <!--<dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
             <version>4.0</version>
-        </dependency>
+        </dependency>-->
         <dependency>
             <groupId>edu.sjsu.cohort6.crowdtester</groupId>
             <artifactId>common</artifactId>
@@ -62,11 +92,11 @@
             <artifactId>database</artifactId>
             <version>${project.version}</version>
         </dependency>
-        <dependency>
+        <!--<dependency>
             <groupId>com.google.code.gson</groupId>
             <artifactId>gson</artifactId>
             <version>2.4</version>
-        </dependency>
+        </dependency>-->
     </dependencies>
     <build>
         <finalName>crowdtester-web</finalName>
@@ -76,8 +106,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.3</version>
                 <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
+                    <source>${jdk.version}</source>
+                    <target>${jdk.version}</target>
                 </configuration>
             </plugin>
             <plugin>
@@ -107,7 +137,7 @@
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ServicesResourceTransformer"/>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>edu.sjsu.cohort6.crowdtester.web.MainController</mainClass>
+                                    <mainClass>edu.sjsu.cohort6.crowdtester.web.SparkServer</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

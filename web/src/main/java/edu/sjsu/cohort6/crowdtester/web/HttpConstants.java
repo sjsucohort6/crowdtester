@@ -20,41 +20,33 @@
  * THE SOFTWARE.
  */
 
-package edu.sjsu.cohort6.crowdtester.web.resource;
+package edu.sjsu.cohort6.crowdtester.web;
 
 import edu.sjsu.cohort6.crowdtester.common.util.EndpointUtils;
-import edu.sjsu.cohort6.crowdtester.database.dao.DBClient;
-import spark.ModelAndView;
-import spark.template.freemarker.FreeMarkerEngine;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static spark.Spark.get;
 
 /**
- * @author rwatsh on 10/18/15.
+ * @author rwatsh on 11/15/15.
  */
-public class LoginResource {
-    public static final String USERS_PATH = EndpointUtils.ENDPOINT_ROOT + "/login";
-    private final DBClient dbClient;
+public interface HttpConstants {
+    public static final String APPLICATION_JSON = "application/json";
+    public static final String TEXT_PLAIN = "text/plain";
+    public static final int HTTP_BAD_REQUEST = 400;
+    public static final int HTTP_NOT_AUTHORIZED = 401;
+    public static final int HTTP_OK = 200;
+    public static final int HTTP_CREATED = 201;
+    public static final int HTTP_ACCEPTED = 202;
+    public static final int HTTP_NOT_FOUND = 404;
+    public static final int HTTP_INTERNAL_ERR = 500;
 
-    public LoginResource(DBClient dbClient) {
-        this.dbClient = dbClient;
-        setupEndpoints();
-    }
+    // REST API paths
+    String CROWDTESTER_API_V1_0 = EndpointUtils.ENDPOINT_ROOT + "/api/v1.0";
+    String CROWDTESTER_API_V1_0_APP = CROWDTESTER_API_V1_0 + "/app";
+    String CROWDTESTER_API_V1_0_BUG = CROWDTESTER_API_V1_0 + "/bug";
+    String CROWDTESTER_API_V1_0_VENDOR = CROWDTESTER_API_V1_0 + "/vendor";
+    String CROWDTESTER_API_V1_0_VENDOR_ID = CROWDTESTER_API_V1_0_VENDOR + "/:vendorId";
+    String WWW_DIR = "/public";
 
-    private void setupEndpoints() {
-        FreeMarkerEngine templateEngine = ResourceUtils.getFreeMarkerEngine();
-
-        get(USERS_PATH, (req, res) -> {
-            Map<String, Object> attributes = new HashMap<>();
-            /*List<User> users = userDAO.fetchById(null);
-            attributes.put("users", users);*/
-
-            return new ModelAndView(attributes, "login.ftl");
-        }, templateEngine);
-    }
-
-
+    //view paths
+    public static final String INDEX_PATH = EndpointUtils.ENDPOINT_ROOT + "/index.ftl";
 }
+
