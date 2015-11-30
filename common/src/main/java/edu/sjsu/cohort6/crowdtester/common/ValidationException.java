@@ -20,41 +20,14 @@
  * THE SOFTWARE.
  */
 
-package edu.sjsu.cohort6.crowdtester.web.view;
-
-import edu.sjsu.cohort6.crowdtester.common.util.EndpointUtils;
-import edu.sjsu.cohort6.crowdtester.database.dao.DBClient;
-import spark.ModelAndView;
-import spark.template.freemarker.FreeMarkerEngine;
-
-import java.util.HashMap;
-import java.util.Map;
-
-import static spark.Spark.get;
+package edu.sjsu.cohort6.crowdtester.common;
 
 /**
- * @author rwatsh on 10/18/15.
+ * @author rwatsh on 11/9/15.
  */
-public class RegisterView {
-    public static final String USERS_PATH = EndpointUtils.ENDPOINT_ROOT + "/register";
-    private DBClient dbClient;
+public class ValidationException extends Exception {
 
-    public RegisterView(DBClient dbClient) {
-        this.dbClient = dbClient;
-        setUpEndpoints();
+    public ValidationException(String message) {
+        super(message);
     }
-
-    private void setUpEndpoints() {
-        FreeMarkerEngine templateEngine = Util.getFreeMarkerEngine();
-
-        get(USERS_PATH, (req, res) -> {
-            Map<String, Object> attributes = new HashMap<>();
-            /*List<User> users = userDAO.fetchById(null);
-            attributes.put("users", users);*/
-
-            return new ModelAndView(attributes, "register.ftl");
-        }, templateEngine);
-    }
-
-
 }

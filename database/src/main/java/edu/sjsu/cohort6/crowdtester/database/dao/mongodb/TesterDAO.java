@@ -91,13 +91,21 @@ public class TesterDAO extends BasicDAO<Tester, String> implements BaseDAO<Teste
     @Override
     public List<Tester> fetchById(List<String> entityIdsList) {
         List<String> objectIds = new ArrayList<>();
-        for (String id : entityIdsList) {
-            objectIds.add(id);
+        if (entityIdsList != null) {
+            for (String id : entityIdsList) {
+                objectIds.add(id);
+            }
         }
 
-        Query<Tester> query = this.createQuery().field(Mapper.ID_KEY).in(objectIds);
-        QueryResults<Tester> results = this.find(query);
-        return results.asList();
+        if (!objectIds.isEmpty()) {
+            Query<Tester> query = this.createQuery().field(Mapper.ID_KEY).in(objectIds);
+            QueryResults<Tester> results = this.find(query);
+            return results.asList();
+        } else {
+            Query<Tester> query = this.createQuery();
+            QueryResults<Tester> results = this.find(query);
+            return results.asList();
+        }
     }
 
     @Override
@@ -118,5 +126,13 @@ public class TesterDAO extends BasicDAO<Tester, String> implements BaseDAO<Teste
             courses.add(course);
         }
         return courses;
+    }
+
+    public Tester fetchByUserId(String userId) {
+        List<Tester> testers = fetch("{\"user.$id\" : \"" + userId + "\"}");
+        if (testers != null && !testers.isEmpty()) {
+            return testers.get(0);
+        }
+        return null;
     }
 }

@@ -71,12 +71,12 @@ public class User extends BaseModel {
     public User() {
     }
 
-    public User(String emailId, String userName, String firstName, String lastName, Role role) {
+    public User(String emailId, String userName, String firstName, String lastName, Role role, String password) {
         this.emailId = emailId;
         this.userName = userName;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.token = randomUUID().toString();
+        this.token = password; //randomUUID().toString();
         if (role == null) {
             this.role = new Role(RoleType.ADMIN);
         } else {

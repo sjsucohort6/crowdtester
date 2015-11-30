@@ -20,39 +20,25 @@
  * THE SOFTWARE.
  */
 
-package edu.sjsu.cohort6.crowdtester.common.model;
+package edu.sjsu.cohort6.crowdtester.common;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.mongodb.morphia.annotations.Embedded;
+import java.text.MessageFormat;
 
 /**
- * Represents testing skills.
- *
- * @author rwatsh on 10/4/15.
+ * @author rwatsh on 11/7/15.
  */
-@Embedded
-public class Skill {
-    private String name;
+public abstract class Validable {
+    public abstract boolean isValid() throws ValidationException;
 
-    public Skill(String name) {
-        this.name = name;
-    }
-
-    public Skill() {}
-
-    @JsonProperty
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    @Override
-    public String toString() {
-        return "Skill{" +
-                "name='" + name + '\'' +
-                '}';
+    protected boolean isReqd(Object obj)  throws ValidationException {
+        if (obj == null) {
+            throw new ValidationException(MessageFormat.format("{0} cannot be null", obj));
+        }
+        if (obj instanceof String) {
+            if (((String) obj).isEmpty()) {
+                throw new ValidationException(MessageFormat.format("{0} cannot be blank", obj));
+            }
+        }
+        return true;
     }
 }

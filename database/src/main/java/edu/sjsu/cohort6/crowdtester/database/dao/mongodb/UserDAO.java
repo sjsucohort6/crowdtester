@@ -97,21 +97,21 @@ public class UserDAO extends BasicDAO<User, String> implements BaseDAO<User> {
     @Override
     public List<User> fetchById(List<String> entityIdsList) {
         List<String> objectIds = new ArrayList<>();
-        Query<User> query = null;
-
         if (entityIdsList != null) {
             for (String id : entityIdsList) {
-                if (id != null) {
-                    //id = CommonUtils.sanitizeIdString(id);
-                    objectIds.add(id);
-                }
+                objectIds.add(id);
             }
         }
-        query = objectIds != null && !objectIds.isEmpty()
-                ? this.createQuery().field(Mapper.ID_KEY).in(objectIds)
-                : this.createQuery();
-        QueryResults<User> results = this.find(query);
-        return results.asList();
+
+        if (!objectIds.isEmpty()) {
+            Query<User> query = this.createQuery().field(Mapper.ID_KEY).in(objectIds);
+            QueryResults<User> results = this.find(query);
+            return results.asList();
+        } else {
+            Query<User> query = this.createQuery();
+            QueryResults<User> results = this.find(query);
+            return results.asList();
+        }
     }
 
     @Override
@@ -133,6 +133,12 @@ public class UserDAO extends BasicDAO<User, String> implements BaseDAO<User> {
         }
         return users;
     }
+
+    public List<User> fetchByName(String userName) {
+        return fetch("{userName: \"" + userName + "\"}");
+    }
+
+
 
     /**
      * This method is required for basic authentication upon every API call.

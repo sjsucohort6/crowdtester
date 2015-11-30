@@ -1,126 +1,111 @@
-<#import "masterTemplate.ftl" as layout />
+<#import "protectedMasterTemplate.ftl" as layout />
 
 <@layout.masterTemplate title="Bug Miner Vendor Dashboard" moduleName="crowdtesterApp">
-
-    <#include "postlogin_header.ftl">
+<#include "postlogin_header.ftl">
 <div class="container">
     <div class="vd-jumbotron">
-        <h3><b><i>Your Profile Info</b></i></h3>
+        <h3><b><i>Welcome</b> ${vendor.user.firstName} ${vendor.user.lastName}</i></h3>
 
-        <p>Email Id:${user.emailId}</p>
+        <p>Email Id:${vendor.user.emailId}</p>
 
-        <p>Your Charge Back: ${vendor.chargeBack}</p>
+        <p>Your Charge Back: ${vendor.chargeBackPolicy}</p>
 
-        <p>Incentives :${vendor.incentive}</p>
+        <p>Incentives :${vendor.incentivePolicy}</p>
 
     </div>
 </div>
 <div class="container" style="padding-top: 25px;">
     <div class="row">
         <div class="table-responsive">
-            <table id="mytable" class="table table-bordered vd-table-hover table-responsive vd-table-striped">
-                <th style : 3px;><input type="checkbox" id="checkall"/></th>
+            <table id="vendorTable" class="table table-striped table-bordered" cellspacing="0" width="100%">
+                <thead>
+                <th style : 3px;>Select</th>
                 <th>Name</th>
                 <th>Description</th>
                 <th>Platform</th>
                 <th>Start Date</th>
                 <th>End Date</th>
-                <th>Delete</th>
+                <th>File</th>
                 </thead>
+                <tfoot>
+                <th style : 3px;>Select</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Platform</th>
+                <th>Start Date</th>
+                <th>End Date</th>
+                <th>File</th>
+                </tfoot>
                 <tbody>
-                    <#list apps as app>
+                    <#list vendor.apps as app>
                     <tr>
-                        <td><input type="checkbox" class="checkthis"/></td>
+                        <td><input type="radio" name="apps" value="${app.name}"
+                                   style="vertical-align: middle; margin: 0px;"></td>
                         <td>${app.name}</td>
                         <td>${app.description}</td>
-                        <td>${app.platform}</td>
-                        <td>${app.startDate}</td>
-                        <td>${app.endDate}</td>
-                        <td>
-                            <p data-placement="top" data-toggle="tooltip" title="Delete">
-                                <button class="btn btn-danger btn-xs" data-title="Delete" data-toggle="modal"
-                                        data-target="#delete"><span class="glyphicon glyphicon-trash"></span></button>
-                            </p>
-                        </td>
+                        <td>${app.supportedPlatforms}</td>
+                        <td>${app.projectStartDate}</td>
+                        <td>${app.projectEndDate}</td>
+                        <td><a href="#">${app.appFileName}</a></td>
                     </tr>
                     </#list>
                 </tbody>
             </table>
-            <div class="clearfix"></div>
-            <ul class="pagination pull-right">
-                <li class="disabled"><a href="#"><span class="glyphicon glyphicon-chevron-left"></span></a></li>
-                <li class="active"><a href="#">1</a></li>
-                <li><a href="#">2</a></li>
-                <li><a href="#">3</a></li>
-                <li><a href="#">4</a></li>
-                <li><a href="#">5</a></li>
-                <li><a href="#"><span class="glyphicon glyphicon-chevron-right"></span></a></li>
-            </ul>
         </div>
     </div>
 </div>
 
 
-<div class="modal fade" id="myModal">
+<div class="modal fade" id="selectTesterModal">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                <h3 class="modal-title">Select Testsr</h3>
+                <h3 class="modal-title">Select Tester</h3>
             </div>
             <div class="modal-body">
-
-                <table class="table table-striped vd-table-hover" id="tblGrid">
-                    <thead id="tblHead">
+                <table class="table table-striped table-bordered" id="testerSelectionTable">
+                    <thead>
                     <tr>
                         <th>Select</th>
                         <th>Name</th>
-                        <th>Skill</th>
+                        <th>Email</th>
+                        <th>Skills</th>
                         <th>Credit</th>
                     </tr>
                     </thead>
+                    <tfoot>
+                    <tr>
+                        <th>Select</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Skills</th>
+                        <th>Credit</th>
+                    </tr>
+                    </tfoot>
                     <tbody>
+                    <#list testers as tester>
                     <tr>
-                        <td><input type="checkbox" class="checkthis"/>
-                        </td>
-                        <td>xyz</td>
-                        <td>android,java,php</td>
-                        <td><span class="glyphicon glyphicon-star" aria-hidden="true"></span>
+                        <td><input type="radio" name="testers" value="${tester.user.userName}"
+                                   style="vertical-align: middle; margin: 0px;"></td>
+                        <td>${tester.user.firstName} ${tester.user.lastName}</td>
+                        <td>${tester.user.emailId}</td>
+                        <td>${tester.skills?join(", ")}</td>
+                        <td>Credit Points: ${tester.creditPoint}<br>
+                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                             <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                             <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                             <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
                             <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
                         </td>
                     </tr>
-
-                    <tr>
-                        <td><input type="checkbox" class="checkthis"/></td>
-                        <td>abc</td>
-                        <td>ios,android</td>
-                        <td><span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                            <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span>
-                            <span class="glyphicon glyphicon-star-empty" aria-hidden="true"></span></td>
-                    </tr>
-                    <tr>
-                        <td><input type="checkbox" class="checkthis"/></td>
-                        <td>xyz</td>
-                        <td>ios</td>
-                        <td><span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span>
-                            <span class="glyphicon glyphicon-star" aria-hidden="true"></span></td>
-                    </tr>
+                    </#list>
                     </tbody>
                 </table>
-
             </div>
             <div class="modal-footer">
-
                 <button type="button" class="btn btn-default " data-dismiss="modal">Close</button>
-                <input type="button" class="btn btn-warning btn-sm pull-right" value="Select">
+                <input type="button" class="btn btn-warning btn-sm pull-right" value="Select" id="modalSelectTesterBtn">
             </div>
         </div>
 
@@ -165,13 +150,13 @@
             <!-- Modal Body -->
             <div class="modal-body">
 
-                <form class="form-horizontal" role="form">
+                <form class="form-horizontal" role="form" method="post" action="/crowdtester/api/v1.0/app">
                     <div class="form-group">
                         <label class="col-sm-2 control-label"
                                for="inputname">AppName</label>
 
                         <div class="col-sm-8">
-                            <input type="email" class="form-control"
+                            <input type="text" class="form-control"
                                    id="inputname" placeholder="Application Name"/>
                         </div>
                     </div>
@@ -181,7 +166,7 @@
                                for="inputdesc">Description</label>
 
                         <div class="col-sm-10">
-                            <input type="password" class="form-control"
+                            <input type="text" class="form-control"
                                    id="inputdesc" placeholder="Description"/>
                         </div>
                     </div>
@@ -196,6 +181,14 @@
 
                             </select>
                             <br><br></div>
+                    </div>
+                    <div class="form-group">
+                        <form enctype="multipart/form-data" method="post" action="/crowdtester/api/v1.0/upload">
+                            <p>Select Application Binary to upload: <input type="file" name="appFile"></p>
+                            <div>
+                                <input type="submit" value="submit">
+                            </div>
+                        </form>
                     </div>
                     <br/>
 
@@ -233,7 +226,7 @@
                         data-dismiss="modal">
                     Close
                 </button>
-                <button type="button" class="btn-vendor-dashboard">
+                <button type="button" class="btn-vendor-dashboard" id="addAppBtn">
                     Add Application
                 </button>
             </div>
@@ -243,11 +236,11 @@
 </div>
 <div class="container">
 
-    <button class="btn btn-vendor-dashboard btn-lg" data-toggle="modal" data-target="#myModalHorizontal">
+    <button class="btn btn-vendor-dashboard btn-lg" data-toggle="modal" data-target="#myModalHorizontal" id="addAppBtn">
         ADD
     </button>
-    <button type="button" class="btn btn-vendor-dashboard btn-sm">DELETE</button>
-    <button type="button" class="btn btn-vendor-dashboard btn-sm" href="#myModal" id="openBtn" data-toggle="modal">
+    <button type="button" class="btn btn-vendor-dashboard btn-sm" id="deleteAppBtn">DELETE</button>
+    <button type="button" class="btn btn-vendor-dashboard btn-sm" href="#selectTesterModal" data-toggle="modal" id="selectTesterBtn">
         SELECT TESTER
     </button>
     <a href="bugtracker.ftl">

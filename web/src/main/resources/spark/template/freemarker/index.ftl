@@ -27,48 +27,66 @@
         </div>
     </div>
 </div>
-<div class="modal fade" id="register-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true" style="display: none;">
+<div class="modal fade" id="register-modal">
     <div class="modal-dialog">
         <div class="loginmodal-container">
             <h1>Join Us</h1><br>
 
-            <form>
-                <input type="text" name="user" placeholder="Firstname">
-                <input type="text" name="user" placeholder="Lastname">
-                <input type="text" name="user" placeholder="EmailId">
-                <input type="password" name="pass" placeholder="Password">
-                <input type="password" name="repass" placeholder="Re-type Password">
-
-                <div class="dropdown">
-                    I am:
-                    <button class="btn btn-default dropdown-toggle" type="button" id="dropdownMenu1"
-                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                        Select
-                        <span class="caret"></span>
-                    </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenu1">
-                        <li><a href="#">Vendor</a></li>
-                        <li><a href="#">Tester</a></li>
-
-                    </ul>
+            <div id="regStatus"></div>
+            <form role="form" action="/crowdtester/api/v1.0/register" method="POST">
+                <div class="form-group">
+                    <input type="text" name="firstName" id="regFirstName" placeholder="Firstname">
                 </div>
+                <div class="form-group">
+                    <input type="text" name="lastName" id="regLastName" placeholder="Lastname">
+                </div>
+                <div class="form-group">
+                    <input type="text" name="emailId" id="regEmailId" placeholder="EmailId">
+                </div>
+                <div class="form-group">
+                    <input type="password" name="pass" id="regPasswd" placeholder="Password">
+                </div>
+                <div class="form-group">
+                    <input type="password" name="repass" id="regRePasswd" placeholder="Re-type Password">
+                </div>
+                <div class="form-group">
+                    <label for="regUserRole">Role</label>
+                    <select class="form-control" id="regUserRole" name="role">
+                        <option>Vendor</option>
+                        <option>Tester</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <input type="text" name="vendorName" id="regVendorName" placeholder="Vendor Name">
+                </div>
+                <div class="form-group">
+                    <label for="regTesterSkills">Tester Skills (Hold Cntl/Cmd key to select multiple skills)</label>
+                    <select class="form-control" id="regTesterSkills" nam="testerSkills" multiple>
+                        <option>Android </option>
+                        <option>iOS </option>
+                        <option>Blackberry </option>
+                        <option>Windows </option>
+                        <option>Whitebox </option>
+                        <option>Automation </option>
+                        <option>Manual </option>
+                    </select>
+                </div>
+                <#-- </div>-->
                 <br/>
-                <input type="submit" name="login" class="login loginmodal-submit" value="Register">
+                <input type="submit" name="register" class="login loginmodal-submit" id="registerBtn" value="Register">
             </form>
         </div>
     </div>
 </div>
-<div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
-     style="display: none;">
+<div class="modal fade" id="login-modal">
     <div class="modal-dialog">
         <div class="loginmodal-container">
             <h1>Login to Your Account</h1><br>
 
-            <form>
-                <input type="text" name="user" placeholder="Username">
-                <input type="password" name="pass" placeholder="Password">
-                <input type="submit" name="login" class="login loginmodal-submit" value="Login">
+            <form role="form" action="/crowdtester/api/v1.0/login" method="POST">
+                <input type="text" name="user" id="user" placeholder="Username">
+                <input type="password" name="password" id="password" placeholder="Password">
+                <input type="submit" name="login" class="login loginmodal-submit" id="loginBtn" value="Login">
             </form>
         </div>
     </div>
@@ -125,14 +143,4 @@
         </div>
     </div>
 </div>
-<script type="text/javascript">
-
-	$(document).ready(function() {
-	$('#myCarousel').carousel({
-	  interval: 4000
-	});
-
-	});
-
-</script>
 </@layout.masterTemplate>

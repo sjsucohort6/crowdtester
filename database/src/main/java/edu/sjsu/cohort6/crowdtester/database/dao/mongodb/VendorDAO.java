@@ -93,21 +93,21 @@ public class VendorDAO extends BasicDAO<Vendor, String> implements BaseDAO<Vendo
     @Override
     public List<Vendor> fetchById(List<String> entityIdsList) {
         List<String> objectIds = new ArrayList<>();
-        Query<Vendor> query = null;
-
         if (entityIdsList != null) {
             for (String id : entityIdsList) {
-                if (id != null) {
-                    //id = CommonUtils.sanitizeIdString(id);
-                    objectIds.add(id);
-                }
+                objectIds.add(id);
             }
         }
-        query = objectIds != null && !objectIds.isEmpty()
-                ? this.createQuery().field(Mapper.ID_KEY).in(objectIds)
-                : this.createQuery();
-        QueryResults<Vendor> results = this.find(query);
-        return results.asList();
+
+        if (!objectIds.isEmpty()) {
+            Query<Vendor> query = this.createQuery().field(Mapper.ID_KEY).in(objectIds);
+            QueryResults<Vendor> results = this.find(query);
+            return results.asList();
+        } else {
+            Query<Vendor> query = this.createQuery();
+            QueryResults<Vendor> results = this.find(query);
+            return results.asList();
+        }
     }
 
     @Override
@@ -128,5 +128,13 @@ public class VendorDAO extends BasicDAO<Vendor, String> implements BaseDAO<Vendo
             users.add(user);
         }
         return users;
+    }
+
+    public Vendor fetchByUserId(String userId) {
+        List<Vendor> vendors = fetch("{\"user.$id\" : \"" + userId + "\"}");
+        if (vendors != null && !vendors.isEmpty()) {
+            return vendors.get(0);
+        }
+        return null;
     }
 }

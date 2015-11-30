@@ -97,13 +97,21 @@ public class AppDAO extends BasicDAO<App, String> implements BaseDAO<App> {
     @Override
     public List<App> fetchById(List<String> entityIdsList) {
         List<String> objectIds = new ArrayList<>();
-        for (String id : entityIdsList) {
-            objectIds.add(id);
+        if (entityIdsList != null) {
+            for (String id : entityIdsList) {
+                objectIds.add(id);
+            }
         }
 
-        Query<App> query = this.createQuery().field(Mapper.ID_KEY).in(objectIds);
-        QueryResults<App> results = this.find(query);
-        return results.asList();
+        if (!objectIds.isEmpty()) {
+            Query<App> query = this.createQuery().field(Mapper.ID_KEY).in(objectIds);
+            QueryResults<App> results = this.find(query);
+            return results.asList();
+        } else {
+            Query<App> query = this.createQuery();
+            QueryResults<App> results = this.find(query);
+            return results.asList();
+        }
     }
 
     @Override
@@ -124,5 +132,9 @@ public class AppDAO extends BasicDAO<App, String> implements BaseDAO<App> {
             apps.add(app);
         }
         return apps;
+    }
+
+    public List<App> fetchByTesterId(String testerId) {
+        return fetch("{\"testers._id\" : \"" +  testerId + "\"}");
     }
 }

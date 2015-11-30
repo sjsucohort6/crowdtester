@@ -24,7 +24,6 @@ package edu.sjsu.cohort6.crowdtester.common.model.entity;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import edu.sjsu.cohort6.crowdtester.common.model.BaseModel;
-import edu.sjsu.cohort6.crowdtester.common.model.Skill;
 import org.bson.types.ObjectId;
 import org.hibernate.validator.constraints.NotEmpty;
 import org.mongodb.morphia.annotations.Entity;
@@ -48,7 +47,8 @@ public class Tester extends BaseModel {
 
     @NotNull
     @NotEmpty
-    private List<Skill> skills;
+    private List<String> skills;
+
 
     /**
      * System will auto assign credit points for every valid bug filed by the tester.
@@ -80,11 +80,11 @@ public class Tester extends BaseModel {
     }
 
     @JsonProperty
-    public List<Skill> getSkills() {
+    public List<String> getSkills() {
         return skills;
     }
 
-    public void setSkills(List<Skill> skills) {
+    public void setSkills(List<String> skills) {
         this.skills = skills;
     }
 

@@ -92,13 +92,21 @@ public class BugDAO extends BasicDAO<Bug, String> implements BaseDAO<Bug> {
     @Override
     public List<Bug> fetchById(List<String> entityIdsList) {
         List<String> objectIds = new ArrayList<>();
-        for (String id : entityIdsList) {
-            objectIds.add(id);
+        if (entityIdsList != null) {
+            for (String id : entityIdsList) {
+                objectIds.add(id);
+            }
         }
 
-        Query<Bug> query = this.createQuery().field(Mapper.ID_KEY).in(objectIds);
-        QueryResults<Bug> results = this.find(query);
-        return results.asList();
+        if (!objectIds.isEmpty()) {
+            Query<Bug> query = this.createQuery().field(Mapper.ID_KEY).in(objectIds);
+            QueryResults<Bug> results = this.find(query);
+            return results.asList();
+        } else {
+            Query<Bug> query = this.createQuery();
+            QueryResults<Bug> results = this.find(query);
+            return results.asList();
+        }
     }
 
     @Override

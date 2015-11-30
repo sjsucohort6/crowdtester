@@ -48,6 +48,7 @@ public class MongoDBClient implements DBClient {
     private UserDAO userDAO;
     private VendorDAO vendorDAO;
     private TesterDAO testerDAO;
+    private SessionDAO sessionDAO;
 
     /**
      * Constructs a MongoDB client instance.
@@ -73,6 +74,7 @@ public class MongoDBClient implements DBClient {
         userDAO = new UserDAO(mongoClient, morphia, dbName);
         vendorDAO = new VendorDAO(mongoClient, morphia, dbName);
         testerDAO = new TesterDAO(mongoClient, morphia, dbName);
+        sessionDAO = new SessionDAO(mongoClient, morphia, dbName);
     }
 
     @Override
@@ -115,6 +117,8 @@ public class MongoDBClient implements DBClient {
                 return vendorDAO;
             } else if (clazz.getTypeName().equalsIgnoreCase(TesterDAO.class.getTypeName())) {
                 return testerDAO;
+            } else if (clazz.getTypeName().equalsIgnoreCase(SessionDAO.class.getTypeName())) {
+                return sessionDAO;
             }
         }
         return null;

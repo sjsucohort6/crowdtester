@@ -138,7 +138,7 @@ public abstract class DBTest<T extends BaseDAO, S> {
 
     public static User getTestUser() {
         String randomStr = getRandomStr();
-        return new User("john.doe@sjsu.edu" + randomStr, "john.doe@sjsu.edu" + randomStr, "John" + randomStr, "Doe", new Role(RoleType.TESTER));
+        return new User("john.doe@sjsu.edu" + randomStr, "john.doe@sjsu.edu" + randomStr, "John" + randomStr, "Doe", new Role(RoleType.TESTER), "password");
     }
 
     private static String getRandomStr() {
@@ -149,11 +149,11 @@ public abstract class DBTest<T extends BaseDAO, S> {
     public static Tester testCreateTester() {
         Tester tester = new Tester();
         tester.setCreditPoint(0);
-        tester.setSkills(new ArrayList<Skill>() {
+        tester.setSkills(new ArrayList<String>() {
             {
-                add(new Skill("IOS"));
-                add(new Skill("Android"));
-                add(new Skill("Java"));
+                add("IOS");
+                add("Android");
+                add("Java");
             }});
         tester.setUser(testCreateUser());
         TesterDAO testerDAO = (TesterDAO) client.getDAO(TesterDAO.class);

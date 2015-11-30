@@ -23,7 +23,7 @@
 package edu.sjsu.cohort6.crowdtester.web.view;
 
 import edu.sjsu.cohort6.crowdtester.database.dao.DBClient;
-import spark.ModelAndView;
+import spark.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -39,12 +39,15 @@ public class MainView extends BaseView {
         super(viewPath, dbClient);
 
 
-        get(viewPath, (req, res) -> {
-            Map<String, Object> attributes = new HashMap<>();
+        get(viewPath, new TemplateViewRoute() {
+            @Override
+            public ModelAndView handle(Request req, Response res) throws Exception {
+                Map<String, Object> attributes = new HashMap<>();
             /*List<User> users = userDAO.fetchById(null);
             attributes.put("users", users);*/
 
-            return new ModelAndView(attributes, "index.ftl");
+                return new ModelAndView(attributes, "index.ftl");
+            }
         }, templateEngine);
     }
 
